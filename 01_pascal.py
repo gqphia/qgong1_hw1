@@ -223,17 +223,8 @@ def main():
     NUM_ITERS = train_iters/log_iters
     BATCH_SIZE = 100
 
-    #session = tf.InteractiveSession()
-    #session.run(tf.global_variables_initializer())
-    #write_op = tf.summary.merge_all()
-    #sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
-    #session = tf.Session()
-
     # tf.train.SummaryWriter -> tf.summary.FileWriter
-    train_writer = tf.summary.FileWriter("./tmp/pascal_model_scratch")#, session.graph)
-    #x = np.multiply(range(log_iters+1), NUM_ITERS)
-    #train_loss = np.multiply(range(log_iters+1), 0.0)
-    #acc = np.multiply(range(log_iters+1), 0.0)
+    train_writer = tf.summary.FileWriter("./tmp/pascal_model_scratch")
 
 
     train_input_fn = tf.estimator.inputs.numpy_input_fn(
@@ -243,7 +234,7 @@ def main():
             num_epochs=None,
             shuffle=True)
 
-# Evaluate the model and print results
+    # Evaluate the model and print results
     eval_input_fn = tf.estimator.inputs.numpy_input_fn(
             x={"x": eval_data, "w": eval_weights},
             y=eval_labels,
@@ -256,11 +247,7 @@ def main():
             input_fn=train_input_fn,
             steps=NUM_ITERS,
             hooks=[logging_hook])
-        #save training loss
-        #train_loss[i+1] = logging_hook.tensors.loss
-        #print('Training loss at iter %s: %s' % (i*NUM_ITERS, logging_hook.tensors.loss))
-
-        
+       
         pred = list(pascal_classifier.predict(input_fn=eval_input_fn))
         pred = np.stack([p['probabilities'] for p in pred])
         rand_AP = compute_map(
@@ -282,22 +269,6 @@ def main():
                                                      simple_value=np.mean(AP))])
         train_writer.add_summary(summary, i*NUM_ITERS)
         print('Accuracy at iter %s: %s' % (i*NUM_ITERS, np.mean(AP)))
-        
-        #summary1 = session.run(write_op, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
-        #train_writer.add_summary(summary1, i*NUM_ITERS)
-        #train_writer.flush()
-
-
-        # plot figure
-        #plt.clf()
-        #fig = plt.figure(1)
-        #plt.plot(x, acc)
-        #fig.savefig("Test_mAP_for_Task_1.png")
-
-        #plt.figure(2)
-        #plt.plot(x, train_loss)
-        #fig.savefig("training loss for Task 1.png")
-
 
     train_writer.close()
  

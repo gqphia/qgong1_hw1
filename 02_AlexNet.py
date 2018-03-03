@@ -45,7 +45,7 @@ CLASS_NAMES = [
 ]
 
 ## source from https://gist.github.com/kukuruza/03731dc494603ceab0c5 ##
-def put_kernels_on_grid (kernel, pad = 1):
+def visualize_kernel (kernel, pad = 1):
 
   '''Visualize conv. filters as an image (mostly for the 1st layer).
   Arranges filters into a grid, with some paddings between adjacent filters.
@@ -128,7 +128,7 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         # TASK 5: Visualize conv1 kernels
         tf.get_variable_scope().reuse_variables()
         weights = tf.get_variable('conv2d/kernel')
-        grid = put_kernels_on_grid (weights)
+        grid = visualize_kernel(weights)
         tf.summary.image('conv1/weights', grid, max_outputs=1)
 
     # Pooling Layer #1
@@ -206,9 +206,6 @@ def cnn_model_fn(features, labels, mode, num_classes=20):
         # Add `softmax_tensor` to the graph. It is used for PREDICT and by the
         # `logging_hook`.
         "probabilities": tf.nn.sigmoid(logits, name="sigmoid_tensor")
-        # add pool5 and fc7 for TASK5
-        #"pool5": pool3
-        #"fc7": dense2
     }
 
 

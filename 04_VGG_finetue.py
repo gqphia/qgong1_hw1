@@ -476,12 +476,6 @@ def main():
 		for cid, cname in enumerate(CLASS_NAMES):
 			print('{}: {}'.format(cname, _get_el(AP, cid)))
 
-		# add test loss to tensorboard
-		#ev = pascal_classifier.evaluate(input_fn=eval_input_fn)
-		#summary0 = tf.Summary(value=[tf.Summary.Value(tag='test_loss',
-		#											 simple_value=ev["loss"])])
-		#mAP_writer.add_summary(summary0, i*NUM_ITERS)
-
 		# draw graph
 		print('accuracy: %d' % np.mean(AP))
 		summary = tf.Summary(value=[tf.Summary.Value(tag='test_mAP',

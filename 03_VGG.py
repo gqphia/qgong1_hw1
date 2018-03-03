@@ -43,10 +43,8 @@ CLASS_NAMES = [
 ]
 
 def cnn_model_fn(features, labels, mode, num_classes=20):
-    # Write this function
     """Model function for CNN."""
     # Input Layer
-    # N = features["x"].shape[0]
     input_layer = tf.reshape(features["x"], [-1, 256, 256, 3])
 
     # Data Augmentation
